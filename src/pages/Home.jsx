@@ -1,7 +1,7 @@
 import React from 'react';
 import {Categories, SortPopup, PizzaBlock} from "../components";
 
-const Home = () => {
+const Home = ({ items }) => {
     return (
         <div className="container">
             <div className="content__top">
@@ -13,11 +13,20 @@ const Home = () => {
                                 'Острые',
                                 'Закрытые',
                             ]}/>
-                <SortPopup items={['популярности', 'цене', 'алфавиту']} />
+                <SortPopup items={['популярности', 'цене', 'алфавиту']}/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-                <PizzaBlock />
+                {
+                    items.map(obj => (
+                        // прокидывание пропсов
+                        // <PizzaBlock key={obj.id} name={obj.name} imageUrl={obj.imageUrl}/>
+                        // <PizzaBlock key={obj.id} obj={obj} />
+                        // все свойства пробрасываются
+                        <PizzaBlock key={obj.id} {...obj} />
+                    ))
+                }
+
             </div>
         </div>
 

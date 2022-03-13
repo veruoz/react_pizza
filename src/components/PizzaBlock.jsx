@@ -1,28 +1,61 @@
-import React from 'react';
+import React, {useState} from 'react';
+import classNames from "classnames";
 
-const PizzaBlock = () => {
+const PizzaBlock = ({name, imageUrl, price, types, sizes}) => {
+    const availableTypes =['тонкое', 'традиционное']
+    const availableSize =[26, 30, 40]
+    // чтобы активным было поле, где есть тот или другой индекс берем первый элемент массива
+    const [activeType, setActiveType] = useState(types[0]);
+    const [activeSize, setActiveSize] = useState(sizes[0]);
+
+    const onSelectType = (index) => {
+        setActiveType(index)
+    }
+    const onSelectSize = (index) => {
+        setActiveSize(index)
+    }
+    console.log(name, types)
+
     return (
         <div className="pizza-block">
             <img
                 className="pizza-block__image"
-                src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
+                src={imageUrl}
                 alt="Pizza"
             />
-            <h4 className="pizza-block__title">Чизбургер-пицца</h4>
+            <h4 className="pizza-block__title">{name}</h4>
             <div className="pizza-block__selector">
                 <ul>
-                    <li className="active">тонкое</li>
-                    <li>традиционное</li>
+                    {availableTypes.map((type, index) => (
+                        <li
+                            className={classNames({
+                                active: activeType === index,
+                                disabled: !types.includes(index),
+                            })}
+                            // className={activeType === index ? 'active' : ''}
+                            onClick={() => onSelectType(index)}
+                            key={type}
+                        >{type}</li>
+                    ))}
+                    {/*<li className={activeType === 0 ? "active" : ''}>тонкое</li>*/}
+                    {/*<li className={activeType === 1 ? "disable" : ''}>традиционное</li>*/}
                 </ul>
                 <ul>
-                    <li className="active">26 см.
-                    </li>
-                    <li>30 см.</li>
-                    <li>40 см.</li>
+                    {availableSize.map((size, index) => (
+                        <li
+                            className={classNames({
+                                active: activeSize === index,
+                                disabled: !sizes.includes(size),
+                            })}
+                            // className={activeType === index ? 'active' : ''}
+                            onClick={() => onSelectSize(index)}
+                            key={size}
+                        >{size} см.</li>
+                    ))}
                 </ul>
             </div>
             <div className="pizza-block__bottom">
-                <div className="pizza-block__price">от 395 ₽</div>
+                <div className="pizza-block__price">от {price} ₽</div>
                 <div className="button button--outline button--add">
                     <svg
                         width="12"
