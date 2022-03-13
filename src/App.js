@@ -11,7 +11,7 @@ function App() {
     const [pizzas, setPizzas] = useState([]);
     React.useEffect(() => {
         axios.get('http://localhost:3000/db.json').then(({data}) => {
-            console.log('axios', data)
+            // console.log('axios', data)
             setPizzas(data.pizzas)
         })
         //   axios.get('http://localhost:3000/db.json').then(resp => {
