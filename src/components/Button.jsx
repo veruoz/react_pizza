@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import PropTypes from "prop-types";
 
 // class Button extends React.Component {
 //     render() {
@@ -30,6 +31,10 @@ function Button({ onClick, className, outline, children }) {
             'button--outline': outline,
         })}>{children}</button>
     )
+}
+
+Button.propTypes = {
+    onClick: PropTypes.func
 }
 
 export default Button

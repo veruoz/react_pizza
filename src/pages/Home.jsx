@@ -23,7 +23,7 @@ const Home = ({ items }) => {
                         // <PizzaBlock key={obj.id} name={obj.name} imageUrl={obj.imageUrl}/>
                         // <PizzaBlock key={obj.id} obj={obj} />
                         // все свойства пробрасываются
-                        <PizzaBlock key={obj.id} {...obj} />
+                        <PizzaBlock key={obj.id} {...obj}  />
                     ))
                 }
 

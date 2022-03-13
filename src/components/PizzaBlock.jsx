@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
+import PropTypes from 'prop-types'
 import classNames from "classnames";
 
-const PizzaBlock = ({name, imageUrl, price, types, sizes}) => {
-    const availableTypes =['тонкое', 'традиционное']
-    const availableSize =[26, 30, 40]
+const PizzaBlock = ({ name, imageUrl, price, types, sizes }) => {
+    const availableTypes = ['тонкое', 'традиционное']
+    const availableSize = [26, 30, 40]
     // чтобы активным было поле, где есть тот или другой индекс берем первый элемент массива
     const [activeType, setActiveType] = useState(types[0]);
     const [activeSize, setActiveSize] = useState(sizes[0]);
@@ -14,7 +15,7 @@ const PizzaBlock = ({name, imageUrl, price, types, sizes}) => {
     const onSelectSize = (index) => {
         setActiveSize(index)
     }
-    console.log(name, types)
+    // console.log(name, types)
 
     return (
         <div className="pizza-block">
@@ -29,7 +30,7 @@ const PizzaBlock = ({name, imageUrl, price, types, sizes}) => {
                     {availableTypes.map((type, index) => (
                         <li
                             className={classNames({
-                                active: activeType === index,
+                                active:   activeType === index,
                                 disabled: !types.includes(index),
                             })}
                             // className={activeType === index ? 'active' : ''}
@@ -44,7 +45,7 @@ const PizzaBlock = ({name, imageUrl, price, types, sizes}) => {
                     {availableSize.map((size, index) => (
                         <li
                             className={classNames({
-                                active: activeSize === index,
+                                active:   activeSize === index,
                                 disabled: !sizes.includes(size),
                             })}
                             // className={activeType === index ? 'active' : ''}
@@ -76,5 +77,20 @@ const PizzaBlock = ({name, imageUrl, price, types, sizes}) => {
         </div>
     );
 };
+
+PizzaBlock.propTypes = {
+    name: PropTypes.string,
+    imageUrl: PropTypes.string,
+    price: PropTypes.number,
+    types: PropTypes.arrayOf(PropTypes.number),
+    sizes: PropTypes.arrayOf(PropTypes.number),
+}
+
+PizzaBlock.defaultProps = {
+    name: '---',
+    price: 0,
+    types: [],
+    sizes: []
+}
 
 export default PizzaBlock;
