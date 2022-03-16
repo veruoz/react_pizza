@@ -8,7 +8,7 @@ const SortPopup = ({items}) => {
     // сохранить элемент через анонимную функцию ref={(ref) => console.log(ref)}
     const sortRef = useRef()
 
-    const activeLabel = items[activeItem]
+    const activeLabel = items[activeItem].name
 
     // todo в данном случае в компоненте чтобы при каждом рендере не создавалась анонимная функция делаем так, иначе это каждый раз новая ячейка памяти
     const toggleVisiblePopup = () => {
@@ -60,10 +60,10 @@ const SortPopup = ({items}) => {
             </div>
             {visiblePopup && <div className="sort__popup">
                 <ul>
-                    {items && items.map((item, index) => <li
+                    {items && items.map((obj, index) => <li
                         className={activeItem === index ? 'active' : ''}
-                        key={`${item}_${index}`}
-                        onClick={() => onSelectItem(index)}>{item}</li>)}
+                        key={`${obj.type}_${index}`}
+                        onClick={() => onSelectItem(index)}>{obj.name}</li>)}
                 </ul>
             </div>}
         </div>

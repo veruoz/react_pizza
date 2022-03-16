@@ -1,42 +1,68 @@
-import './scss/app.scss';
 import {Header} from "./components";
 import {Cart, Home} from "./pages";
 import {Route} from "react-router-dom";
-import React, {useState} from "react";
+import React from "react";
 import axios from "axios";
+import store from "./redux/store";
+// import {setPizzas as setPizzasAction} from "./redux/actions/pizzas";
+import {setPizzas} from "./redux/actions/pizzas";
+import {connect} from "react-redux";
+import './scss/app.scss';
 
-function App() {
 
-    // fetch
-    const [pizzas, setPizzas] = useState([]);
-    React.useEffect(() => {
-        axios.get('http://localhost:3000/db.json').then(({data}) => {
-            // console.log('axios', data)
-            setPizzas(data.pizzas)
+// function App() {
+//     React.useEffect(() => {
+//         axios.get('http://localhost:3000/db.json').then(({data}) => {
+//             setPizzas(data.pizzas)
+//         })
+//     }, [])
+//
+//     return (
+//     );
+// }
+
+class App extends React.Component {
+    componentDidMount() {
+        axios.get('http://localhost:3000/db.json').then(({ data }) => {
+            // console.log(setPizzas(data.pizzas))
+            // this.props.dispatch(setPizzasAction(data.pizzas))
+            this.props.setPizzas(data.pizzas)
         })
-        //   axios.get('http://localhost:3000/db.json').then(resp => {
-        //     console.log('axios', resp)
-        // })
-    //     fetch('http://localhost:3000/db.json').then((resp) => {
-    //         console.log('fetch', resp)
-    //         resp.json()
-    //     }).then(json => {
-    //         setPizzas(json.pizzas)
-    //     })
-    }, [])
+    }
 
-    // console.log(pizzas)
-    return (
-        <div className="wrapper">
+    render() {
+        // console.log(this.props)
+        return <div className="wrapper">
             <Header/>
-            {/*<Button name='Press' />*/}
-            {/*<Button name='noPress' outline/>*/}
             <div className="content">
-                <Route exact path='/' render={() => <Home items={pizzas} />}/>
+                <Route exact path='/' render={() => <Home items={this.props.items}/>}/>
                 <Route exact path='/cart' component={Cart}/>
             </div>
         </div>
-    );
+    }
+}
+// достает данные из store и пропихивает в props App
+const mapStateToProps = (state) => {
+    // console.log(state, 'mapStateToProps')
+    return {
+        items: state.pizzas.items,
+        filters: state.filters
+    }
+}
+// если // import {setPizzas as setPizzasAction} from "./redux/actions/pizzas";
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         setPizzas: (items) => dispatch(setPizzasAction(items)),
+//         // setPizzas: (items) => dispatch(setPizzasAction(items)),
+//         // dispatch,
+//     }
+// }
+
+// короткая версия записи mapDispatchToProps если action и метод в props одинаковый
+// функция возьмет action обернет в диспач и передаст в пропсах
+const mapDispatchToProps = {
+    setPizzas,
 }
 
-export default App;
+// App connect должен следить за изменениями в хранилище store
+export default connect(mapStateToProps, mapDispatchToProps)(App);
