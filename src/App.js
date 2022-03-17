@@ -3,66 +3,37 @@ import {Cart, Home} from "./pages";
 import {Route} from "react-router-dom";
 import React from "react";
 import axios from "axios";
-import store from "./redux/store";
+// import store from "./redux/store";
 // import {setPizzas as setPizzasAction} from "./redux/actions/pizzas";
 import {setPizzas} from "./redux/actions/pizzas";
-import {connect} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import './scss/app.scss';
 
+function App() {
+    const dispatch = useDispatch()
+    // если идет получение данных из хранилища, то нужно указывать какие именно данные нужны, а не весь state и делать лишний ререндер
+    const { items } = useSelector(({ pizzas, filters }) => {
+        return {
+            items:  pizzas.items,
+        }
+    })
 
-// function App() {
-//     React.useEffect(() => {
-//         axios.get('http://localhost:3000/db.json').then(({data}) => {
-//             setPizzas(data.pizzas)
-//         })
-//     }, [])
-//
-//     return (
-//     );
-// }
-
-class App extends React.Component {
-    componentDidMount() {
+    React.useEffect(() => {
         axios.get('http://localhost:3000/db.json').then(({ data }) => {
-            // console.log(setPizzas(data.pizzas))
-            // this.props.dispatch(setPizzasAction(data.pizzas))
-            this.props.setPizzas(data.pizzas)
+            dispatch(setPizzas(data.pizzas))
         })
-    }
+    }, [dispatch])
 
-    render() {
-        // console.log(this.props)
-        return <div className="wrapper">
+    return (
+        <div className="wrapper">
             <Header/>
             <div className="content">
-                <Route exact path='/' render={() => <Home items={this.props.items}/>}/>
+                <Route exact path='/' render={() => <Home items={items}/>}/>
                 <Route exact path='/cart' component={Cart}/>
             </div>
         </div>
-    }
-}
-// достает данные из store и пропихивает в props App
-const mapStateToProps = (state) => {
-    // console.log(state, 'mapStateToProps')
-    return {
-        items: state.pizzas.items,
-        filters: state.filters
-    }
-}
-// если // import {setPizzas as setPizzasAction} from "./redux/actions/pizzas";
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         setPizzas: (items) => dispatch(setPizzasAction(items)),
-//         // setPizzas: (items) => dispatch(setPizzasAction(items)),
-//         // dispatch,
-//     }
-// }
-
-// короткая версия записи mapDispatchToProps если action и метод в props одинаковый
-// функция возьмет action обернет в диспач и передаст в пропсах
-const mapDispatchToProps = {
-    setPizzas,
+    )
 }
 
-// App connect должен следить за изменениями в хранилище store
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App
+
