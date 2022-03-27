@@ -6,21 +6,19 @@ import axios from "axios";
 // import store from "./redux/store";
 // import {setPizzas as setPizzasAction} from "./redux/actions/pizzas";
 import {setPizzas} from "./redux/actions/pizzas";
-import {useSelector, useDispatch} from "react-redux";
+import { useDispatch} from "react-redux";
 import './scss/app.scss';
 
 function App() {
     const dispatch = useDispatch()
-    // если идет получение данных из хранилища, то нужно указывать какие именно данные нужны, а не весь state и делать лишний ререндер
-    const { items } = useSelector(({ pizzas, filters }) => {
-        return {
-            items:  pizzas.items,
-        }
-    })
 
+    // Перенести в redux  и подключить redux-thunk
+    // Следить за фильтрацией и сортировкой, подставлять параметры в url из redux
+    // сделать имитацию загрузки пицц (которая есть в css
     React.useEffect(() => {
-        axios.get('http://localhost:3000/db.json').then(({ data }) => {
-            dispatch(setPizzas(data.pizzas))
+        axios.get('http://localhost:3001/pizzas').then(({ data }) => {
+            // console.log(data)
+            dispatch(setPizzas(data))
         })
     }, [dispatch])
 
@@ -28,7 +26,7 @@ function App() {
         <div className="wrapper">
             <Header/>
             <div className="content">
-                <Route exact path='/' render={() => <Home items={items}/>}/>
+                <Route exact path='/' component={Home}/>
                 <Route exact path='/cart' component={Cart}/>
             </div>
         </div>

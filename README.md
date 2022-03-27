@@ -1,13 +1,17 @@
 # Pizza Project with React.js
 
+`Полный стек:`
+- ReactJS
+- Redux (библиотека для хранения данных на клиентской части)
+- redux-thunk (доп. библиотека для Redux. Асинхроные действия).
+- React Router (библиотека для реализации переходов без перезагрузки страницы).
+- Axios (библиотека для отправки AJAX-запросов)
+- json-server (для хранения пицц на фейковом сервере)
+
 ### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:3000](http://localhost:3000)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `yarn server`
+### `yarn server` open in second Terminal
 
 Launch server for Redux Open [http://localhost:3001](http://localhost:3001)

@@ -1,5 +1,5 @@
 // Action Creator функция которая создает экшн
-const setSortBy = (name) => ({
+export const setSortBy = (name) => ({
     type: 'SET_SORT_BY',
     payload: name
 })
@@ -8,7 +8,7 @@ const setSortBy = (name) => ({
 //     type: 'SET_SORT_BY',
 // })
 
-const setCategory = (catIndex) => ({
+export const setCategory = (catIndex) => ({
     type: 'SET_CATEGORY',
     payload: catIndex
 })

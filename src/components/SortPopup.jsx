@@ -1,24 +1,18 @@
 import React, {useRef, useState} from 'react';
 
-const SortPopup = ({items}) => {
+// memo делает поверхностное сравнение и дает делать лишний раз ререндер аналог shouldUpdateComponent в классовой компоненте
+const SortPopup = React.memo(function SortPopup ({ items }) {
     const [visiblePopup, setVisiblePopup] = useState(false);
     const [activeItem, setActiveItem] = useState(0);
-
-    // для того чтобы сохранить элемент DOM в переменную нужно использовать хук. Чтобы всегда хранить актуальные значения в виде объекта
-    // сохранить элемент через анонимную функцию ref={(ref) => console.log(ref)}
     const sortRef = useRef()
-
     const activeLabel = items[activeItem].name
 
-    // todo в данном случае в компоненте чтобы при каждом рендере не создавалась анонимная функция делаем так, иначе это каждый раз новая ячейка памяти
     const toggleVisiblePopup = () => {
         setVisiblePopup(!visiblePopup)
     }
 
     const handleOutsideClick = (e) => {
-        // * сравнивает и возвращает булеан с минимальным ресурсом нагрузки, клик вне области элемента sort скрывает попап
-        if(!e.path.includes(sortRef.current)) {
-            // console.log('hello')
+        if (!e.path.includes(sortRef.current)) {
             setVisiblePopup(false)
         }
     }
@@ -28,17 +22,12 @@ const SortPopup = ({items}) => {
         setVisiblePopup(false)
     }
 
-    // вызывается 1 раз при рендере если нет зависимостей, если в [] есть зависимость useEffect будет следить за ее изменениями и выполняться каждый раз
     React.useEffect(() => {
         document.body.addEventListener('click', handleOutsideClick)
-        // console.log(sortRef.current)
     }, [])
 
     return (
         <div
-            // ref={(ref) => {
-            //     sortRef.current = ref;
-            // }}
             ref={sortRef}
             className="sort">
             <div className="sort__label">
@@ -67,8 +56,7 @@ const SortPopup = ({items}) => {
                 </ul>
             </div>}
         </div>
-    )
-        ;
-};
+    );
+})
 
 export default SortPopup;
