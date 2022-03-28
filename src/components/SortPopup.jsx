@@ -1,11 +1,12 @@
 import React, {useRef, useState} from 'react';
+import PropTypes from "prop-types";
+import Categories from "./Categories";
 
 // memo делает поверхностное сравнение и дает делать лишний раз ререндер аналог shouldUpdateComponent в классовой компоненте
-const SortPopup = React.memo(function SortPopup ({ items }) {
+const SortPopup = React.memo(function SortPopup ({ items, activeSortType, onClickSortType }) {
     const [visiblePopup, setVisiblePopup] = useState(false);
-    const [activeItem, setActiveItem] = useState(0);
     const sortRef = useRef()
-    const activeLabel = items[activeItem].name
+    const activeLabel = items.find(obj => obj.type === activeSortType).name
 
     const toggleVisiblePopup = () => {
         setVisiblePopup(!visiblePopup)
@@ -18,7 +19,9 @@ const SortPopup = React.memo(function SortPopup ({ items }) {
     }
 
     const onSelectItem = (index) => {
-        setActiveItem(index)
+        if(onClickSortType) {
+            onClickSortType(index)
+        }
         setVisiblePopup(false)
     }
 
@@ -50,13 +53,23 @@ const SortPopup = React.memo(function SortPopup ({ items }) {
             {visiblePopup && <div className="sort__popup">
                 <ul>
                     {items && items.map((obj, index) => <li
-                        className={activeItem === index ? 'active' : ''}
+                        className={activeSortType === obj.type ? 'active' : ''}
                         key={`${obj.type}_${index}`}
-                        onClick={() => onSelectItem(index)}>{obj.name}</li>)}
+                        onClick={() => onSelectItem(obj)}>{obj.name}</li>)}
                 </ul>
             </div>}
         </div>
     );
 })
+
+SortPopup.propTypes = {
+    activeSortType: PropTypes.string.isRequired,
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onClickSortType: PropTypes.func.isRequired
+}
+
+SortPopup.defaultProps = {
+    items: []
+}
 
 export default SortPopup;

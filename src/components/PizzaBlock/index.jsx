@@ -17,6 +17,8 @@ const PizzaBlock = ({ name, imageUrl, price, types, sizes }) => {
     }
     // console.log(name, types)
 
+
+
     return (
         <div className="pizza-block">
             <img

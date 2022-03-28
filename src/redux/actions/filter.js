@@ -1,7 +1,7 @@
 // Action Creator функция которая создает экшн
-export const setSortBy = (name) => ({
+export const setSortBy = ({type, order}) => ({
     type: 'SET_SORT_BY',
-    payload: name
+    payload: {type, order}
 })
 // пример отличие Action без динамической передачи данных через payload
 // const setSortBy = ({

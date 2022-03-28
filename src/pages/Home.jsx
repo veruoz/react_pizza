@@ -1,7 +1,8 @@
 import React from 'react';
-import {Categories, SortPopup, PizzaBlock} from "../components";
+import {Categories, SortPopup, PizzaBlock, PizzaLoadingBlock} from "../components";
 import {useDispatch, useSelector} from "react-redux";
-import {setCategory} from "../redux/actions/filter";
+import {setCategory, setSortBy} from "../redux/actions/filter";
+import {fetchPizzas} from "../redux/actions/pizzas";
 
 // вынесли название категорий за пределы функции Home поскольку они каждый раз обновляются и заставляют ререндериться App
 const categoryNames = [
@@ -12,14 +13,17 @@ const categoryNames = [
     'Закрытые',
 ]
 const sortItems = [
-    { name: 'популярности', type: 'popular' },
-    { name: 'цене', type: 'price' },
-    { name: 'алфавиту', type: 'alphabet' }
+    { name: 'популярности', type: 'popular', order: 'desc' },
+    { name: 'цене', type: 'price', order: 'desc' },
+    { name: 'алфавиту', type: 'name', order: 'asc' }
 ]
 
 const Home = () => {
+    const dispatch = useDispatch()
     // вытащили получение пицц из App и оставили там только dispatch
     const items = useSelector(({ pizzas }) => pizzas.items)
+    const isLoaded = useSelector(({ pizzas }) => pizzas.isLoaded)
+    const {category, sortBy} = useSelector(({ filters }) => filters)
     // сокращенная запись
     // const { items } = useSelector(({ pizzas }) => {
     //     return {
@@ -27,32 +31,40 @@ const Home = () => {
     //     }
     // })
 
-    const dispatch = useDispatch()
+    // получение новых пицц
+    React.useEffect(() => {
+            dispatch(fetchPizzas(sortBy, category))
+    }, [sortBy, category])
 
     // для того чтобы не создавать новую функцию, поскольку она всегда будет новая в событии onClick нужно определить заранее функцию и на нее ссылаться
     const onSelectCategory = React.useCallback((index) => {
         dispatch(setCategory(index))
-    }, [dispatch])
+    }, [])
+
+    const onSelectSortType = React.useCallback((type) => {
+        dispatch(setSortBy(type))
+    }, [])
 
     return (
         <div className="container">
             <div className="content__top">
-                <Categories onClickItem={onSelectCategory}
-                            items={categoryNames}/>
-                <SortPopup items={sortItems}/>
+                <Categories onClickCategory={onSelectCategory}
+                            items={categoryNames}
+                            activeCategory={category}
+                />
+                <SortPopup activeSortType={sortBy.type} items={sortItems} onClickSortType={onSelectSortType} />
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
                 {
-                    items && items.map(obj => (
+                    isLoaded ? items.map(obj => (
                         // прокидывание пропсов
                         // <PizzaBlock key={obj.id} name={obj.name} imageUrl={obj.imageUrl}/>
                         // <PizzaBlock key={obj.id} obj={obj} />
                         // все свойства пробрасываются
-                        <PizzaBlock key={obj.id} {...obj}  />
-                    ))
+                        <PizzaBlock key={obj.id} isLoading={true} {...obj}  />
+                    )) : Array(12).fill(0).map((_, index) => (<PizzaLoadingBlock key={index} />))
                 }
-
             </div>
         </div>
 
