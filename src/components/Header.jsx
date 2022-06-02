@@ -2,17 +2,8 @@ import React from 'react';
 import logoSvg from "../assets/img/pizza-logo.svg";
 import Button from "./Button";
 import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
 
 const Header = () => {
-    // вытаскиваем данные из redux и следим за изменениями через useSelector, чтобы производить ререндер
-    const {totalPrice, totalCount} = useSelector(({cart}) => cart)
-    // или передать
-    // const {totalPrice, totalCount} = useSelector(({cart}) => ({
-    //     totalPrice: cart.totalPrice,
-    //     totalCount: cart.totalCount
-    // }))
-
     return (
         <div className="header">
             <div className="container">
@@ -29,7 +20,7 @@ const Header = () => {
                     <Link to='/cart'>
                         <Button onClick={() => {}} className='button--cart'>
                             {/*<a href="/cart.html" className="button button--cart">*/}
-                                <span>{totalPrice} ₽</span>
+                                <span>520 ₽</span>
                                 <div className="button__delimiter"></div>
                                 <svg
                                     width="18"
@@ -60,7 +51,7 @@ const Header = () => {
                                         strokeLinejoin="round"
                                     />
                                 </svg>
-                                <span>{totalCount}</span>
+                                <span>3</span>
                             {/*</a>*/}
                         </Button>
                     </Link>
