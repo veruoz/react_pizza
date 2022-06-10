@@ -10,7 +10,7 @@ export const setLoaded = (payload) => ({
 export const fetchPizzas = (sortBy, category) => (dispatch) => {
     // любой новый запрос переводит isLoading: false
     dispatch(setLoaded(false))
-    axios.get(`http://localhost:3001/pizzas?${category !== null ? `category=${category}` : ''}&_sort=${sortBy.type}&_order=${sortBy.order}`).then(({ data }) => {
+    axios.get(`/pizzas?${category !== null ? `category=${category}` : ''}&_sort=${sortBy.type}&_order=${sortBy.order}`).then(({ data }) => {
         // console.log(data)
         dispatch(setPizzas(data))
     })
